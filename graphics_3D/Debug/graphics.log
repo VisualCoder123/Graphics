@@ -1,0 +1,10 @@
+﻿  main.cpp
+c:\users\юрий\downloads\graphics_3d\graphics_3d\main.h(46): warning C4244: =: преобразование "double" в "LONG", возможна потеря данных
+c:\users\юрий\downloads\graphics_3d\graphics_3d\main.h(47): warning C4244: =: преобразование "double" в "LONG", возможна потеря данных
+c:\users\юрий\downloads\graphics_3d\graphics_3d\main.cpp(6): warning C4305: инициализация: усечение из "double" в "float"
+c:\users\юрий\downloads\graphics_3d\graphics_3d\main.cpp(11): warning C4101: t2: неиспользованная локальная переменная
+c:\users\юрий\downloads\graphics_3d\graphics_3d\main.cpp(12): warning C4101: clr: неиспользованная локальная переменная
+c:\users\юрий\downloads\graphics_3d\graphics_3d\main.cpp(11): warning C4101: t1: неиспользованная локальная переменная
+c:\users\юрий\downloads\graphics_3d\graphics_3d\main.cpp(11): warning C4101: t: неиспользованная локальная переменная
+  graphics.vcxproj -> C:\Users\Юрий\Downloads\graphics_3D\graphics_3D\Debug\graphics.exe
+  graphics.vcxproj -> C:\Users\Юрий\Downloads\graphics_3D\graphics_3D\Debug\graphics.pdb (Full PDB)
