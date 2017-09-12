@@ -1,41 +1,158 @@
-#include "main.h"
-const int KEY_UP = 72;
-const int KEY_DOWN = 80;
-const int KEY_LEFT = 75;
-const int KEY_RIGHT = 77;
-const float DEGREES_15 =  15 * M_PI / 180.0f;
-VOID DrawSurface(HWND hwnd)
+#include  "main.h " 
+
+VOID drawStatic(HWND hwnd)
 {
 	RECT rc;
-	HDC hdc;
-	double t, t1, t2;
-	COLORREF clr;
-	hdc = GetDC(hwnd);
+	int k = -1;
+	Shape *shape[100];
+	HCURSOR hCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
+
+	for (int i = 0; i < 100; i++)
+		shape[i] = NULL;
+
+	shape[++k] = new Area;
+	shape[k]->Move(0, 0, -150);
+	shape[k]->Size(40);
+	shape[k]->Color(0, 255, 0);
+
+	for (int y = -200; y <= 200; y += 400)
+	for (int x = -200; x <= 200; x += 400)
+	{
+		shape[++k] = new Column;
+		shape[k]->Move(x, y, -80);
+		shape[k]->Size(20);
+		shape[k]->Color(255, 255, 0);
+
+	}
+	shape[++k] = new Pyramida;
+	shape[k]->Move(0, 0, 150);
+	shape[k]->Size(250);
+	shape[k]->Color(255, 160, 0);
+
+	shape[++k] = new Sphere;
+	shape[k]->Move(0, 0, 20);
+	shape[k]->Size(125);
+	shape[k]->Color(255, 0, 0);
+
+	HDC hdc = GetDC(hwnd);
 	GetClientRect(hwnd, &rc);
-	TransformView(rc.right, rc.bottom);
-	PatBlt(hdc, 0, 0, rc.right, rc.bottom, WHITENESS);
-	Surface(hdc, 200, 200, 5, 5);
+	cx = rc.right;
+	cy = rc.bottom;
+
+	depthBuffer = new float[cx*cy];
+	if (depthBuffer == NULL)return;
+	InitBMP();
+
+	for (int i = 0; i < cx*cy; i++)
+		depthBuffer[i] = -10000;
+
+	memset(bmp, 255, 3 * bmpWidth*cy);
+
+	viewMatrix(phi, teta, rc.right, rc.bottom);
+	for (int i = 0; i <= k; i++)
+	if (shape[i])
+		shape[i]->Draw(hdc);
+
+	StretchDIBits(hdc, 0, 0, rc.right, rc.bottom, 0, 0, rc.right, rc.bottom, bmp, bmpinfo, DIB_RGB_COLORS, SRCCOPY);
+
+
+	for (int i = 0; i <= k; i++)
+		delete[] shape[i];
+
+	delete[] bmp;
+	delete[] bmpinfo;
+	delete[] depthBuffer;
+
 	ReleaseDC(hwnd, hdc);
+	SetCursor(hCursor);
+
 }
+
+VOID drawAnimation(HWND hwnd)
+{	
+	RECT rc;
+	int k = -1;
+	Shape *shape[100];
+	HCURSOR hCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
+
+	for (int i = 0; i < 100; i++)
+		shape[i] = NULL; 
+
+	shape[++k] = new Area;
+	shape[k]->Move(0, 0, -150);
+	shape[k]->Size(40);
+	shape[k]->Color(0, 255, 0);
+
+	for (int y = -200; y <= 200; y+=400)
+	for (int x = -200; x <= 200; x += 400)
+	{
+		shape[++k] = new Column;
+		shape[k]->Move(x, y, -80);
+		shape[k]->Size(20);
+		shape[k]->Color(255, 255, 0);
+
+	}
+	shape[++k] = new Pyramida;
+	shape[k]->Move(0, 0, 150);
+	shape[k]->Size(250);
+	shape[k]->Color(255, 160, 0);
+
+	shape[++k] = new Sphere;
+	shape[k]->Move(0, 0, 20);
+	shape[k]->Size(125);
+	shape[k]->Color(255, 0, 0);
+
+	HDC hdc = GetDC(hwnd);
+	GetClientRect(hwnd, &rc);
+	cx = rc.right;
+	cy = rc.bottom;
+
+	depthBuffer = new float[cx*cy];
+	if (depthBuffer == NULL)return;
+	InitBMP();
+
+	for (int phi = 10, teta = 75; phi <= 370; phi++, teta++)
+	{
+		for (int i = 0; i < cx*cy; i++)
+			depthBuffer[i] = -10000;
+
+		memset(bmp, 255, 3 * bmpWidth*cy);
+
+		viewMatrix(phi, teta, rc.right, rc.bottom);
+		for (int i = 0; i <= k;i++)
+		if (shape[i])
+			shape[i]->Draw(hdc);
+
+		StretchDIBits(hdc, 0, 0, rc.right, rc.bottom, 0, 0, rc.right, rc.bottom, bmp, bmpinfo, DIB_RGB_COLORS, SRCCOPY);
+
+	}
+	for (int i = 0; i <= k; i++)
+		delete[] shape[i];
+
+	delete[] bmp;
+	delete[] bmpinfo;
+	delete[] depthBuffer;
+
+	ReleaseDC(hwnd, hdc);
+	SetCursor(hCursor);
+
+}
+
 
 #pragma region Функция OnCommand обработки сообщения  WM_COMMAND
 
 VOID OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 {
-
 	switch (id)
 	{
 	case 1:
-		DrawSurface(hwnd);
+		drawAnimation(hwnd);
+
+
 		break;
 
 	case 2:
 		DestroyWindow(hwnd);
-		break;
-	case 3:
-		SetPhiAndTeta(phi + DEGREES_15, teta);
-		DrawSurface(hwnd);
-
 		break;
 	}
 }
@@ -44,27 +161,46 @@ VOID OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 
 void OnKeyDown(HWND hwnd, UINT vk, BOOL fDown, int cRepeat, UINT flags)
 {
-	float degrees = 15;
 	switch (vk)
 	{
-	case 39:
-		phi += degrees * M_PI / 180.0f;;
+	case 39: // ->
+		phi += angleSpeed * M_PI / 180.0f;;
 		break;
-	case 37:
-		phi -= degrees * M_PI / 180.0f;;
+	case 37: // <-
+		phi -= angleSpeed * M_PI / 180.0f;;
 		break;
-	case 38: 
-		teta += degrees * M_PI / 180.0f;;
+	case 38: // Вверх
+		teta += angleSpeed * M_PI / 180.0f;;
 		break;
-	case 40:
-		teta -= degrees * M_PI / 180.0f;;
+	case 40: // Вниз
+		teta -= angleSpeed * M_PI / 180.0f;;
 		break;
 
-	
+	case 87: // w
+		transY += moveSpeed;
+		break;
+	case 65: // a
+		transX -= moveSpeed;
+		break;
+	case 83: // s
+		transY -= moveSpeed;
+		break;
+	case 68: // d
+		transX += moveSpeed;
+		break; 
+
+	case 82: // r
+		transZ -= moveSpeed;
+		break;
+
+	case 70: // f
+		transZ += moveSpeed;
+		break;
+
+
 	}
-	DrawSurface(hwnd);	
-	
 
+	drawStatic(hwnd);
 
 }
 
@@ -102,9 +238,6 @@ VOID OnDestroy(HWND)
 
 #pragma endregion 
 
-
-
-
 #pragma region 0конная процедура WndProc
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -129,10 +262,9 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, INT)
 	/*Создание контекстного меню */
 	hPopupMenu = CreatePopupMenu();
 	AppendMenu(hPopupMenu, MF_STRING, 1, "Start");
-	AppendMenu(hPopupMenu, MF_STRING, 3, "PHI");
 	AppendMenu(hPopupMenu, MF_SEPARATOR, 0, 0);
 	AppendMenu(hPopupMenu, MF_STRING, 2, "Exit");
-		
+	
 	MSG Msg;
 	WNDCLASS wc;
 
@@ -142,13 +274,13 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, INT)
 	wc.hInstance = hInst;
 	wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-	wc.hbrBackground = NULL;
-	wc.lpszClassName = "Graphics";
+	wc.hbrBackground = GetStockBrush(WHITE_BRUSH);
+	wc.lpszClassName = "MainWindow";
 	RegisterClass(&wc);
 
 	/*Создадим и покажем главное окно*/
-	HWND hwnd = CreateWindow("Graphics", "Graphics 3D", WS_POPUPWINDOW | WS_CAPTION,
-		150, 150, 960, 720, NULL, NULL, hInst, NULL);
+	HWND hwnd = CreateWindow("MainWindow", "Использование абстрактных классов для создания 3D Anime", WS_POPUPWINDOW | WS_CAPTION,
+		150, 150, 960, 720, HWND_DESKTOP, NULL, hInst, NULL);
 	ShowWindow(hwnd, SW_MAXIMIZE);
 
 	/*Войдем в цикл обработки сообщений*/
@@ -158,11 +290,6 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, INT)
 }
 
 #pragma endregion 
-
-
-
-
-
 
 
 
