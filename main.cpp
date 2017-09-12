@@ -1,11 +1,14 @@
 #include  "main.h " 
 
+bool isPressed;
+
+POINT old, current;
 VOID drawStatic(HWND hwnd)
 {
 	RECT rc;
 	int k = -1;
 	Shape *shape[100];
-	HCURSOR hCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
+	// HCURSOR hCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
 	for (int i = 0; i < 100; i++)
 		shape[i] = NULL;
@@ -64,7 +67,7 @@ VOID drawStatic(HWND hwnd)
 	delete[] depthBuffer;
 
 	ReleaseDC(hwnd, hdc);
-	SetCursor(hCursor);
+	// SetCursor(hCursor);
 
 }
 
@@ -73,7 +76,7 @@ VOID drawAnimation(HWND hwnd)
 	RECT rc;
 	int k = -1;
 	Shape *shape[100];
-	HCURSOR hCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
+	// HCURSOR hCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
 	for (int i = 0; i < 100; i++)
 		shape[i] = NULL; 
@@ -134,7 +137,7 @@ VOID drawAnimation(HWND hwnd)
 	delete[] depthBuffer;
 
 	ReleaseDC(hwnd, hdc);
-	SetCursor(hCursor);
+	// SetCursor(hCursor);
 
 }
 
@@ -206,6 +209,36 @@ void OnKeyDown(HWND hwnd, UINT vk, BOOL fDown, int cRepeat, UINT flags)
 
 #pragma region Функция OnContextMenu обработки сообщения  WM_CONTEXTMENU
 
+VOID OnMouseMove(HWND hwnd, int x, int y, UINT keyFlags)
+{
+	if (isPressed)
+	{
+
+		current.x = x;
+		current.y = y;
+		transX -= old.x - current.x;
+		transY -= old.y - current.y;
+		drawStatic(hwnd);
+
+		old.x = current.x;
+		old.y = current.y;
+	}
+}
+
+VOID OnMButtonDown2(HWND hwnd, BOOL fDoubleClick, int x, int y, UINT keyFlags)
+{
+	isPressed = true;
+	old.x = x;
+	old.y = y;
+}
+
+VOID OnMButtonUp(HWND hwnd, int x, int y, UINT flags)
+{
+	isPressed = false;
+}
+
+
+
 VOID OnContextMenu(HWND hwnd, HWND hwndContext, UINT xPos, UINT yPos)
 {
 	// Извлекаем координаты курсора мыши из lParam
@@ -238,6 +271,15 @@ VOID OnDestroy(HWND)
 
 #pragma endregion 
 
+void OnMouseWheel(HWND hwnd, int xPos, int yPos, int zDelta, UINT fwKeys)
+{
+	transZ += zDelta;
+
+
+	drawStatic(hwnd);
+}
+
+
 #pragma region 0конная процедура WndProc
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -248,6 +290,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		HANDLE_MSG(hwnd, WM_CONTEXTMENU, OnContextMenu);
 		HANDLE_MSG(hwnd, WM_DESTROY, OnDestroy);
 		HANDLE_MSG(hwnd, WM_KEYDOWN, OnKeyDown);
+		HANDLE_MSG(hwnd, WM_MOUSEMOVE, OnMouseMove);
+		HANDLE_MSG(hwnd, WM_MOUSEWHEEL, OnMouseWheel);
+
+		HANDLE_MSG(hwnd, WM_MBUTTONDOWN, OnMButtonDown2);
+		HANDLE_MSG(hwnd, WM_MBUTTONUP, OnMButtonUp);
 	default:
 		return(DefWindowProc(hwnd, msg, wParam, lParam));
 	}
