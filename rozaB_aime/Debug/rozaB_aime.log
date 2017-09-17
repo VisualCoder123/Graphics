@@ -1,0 +1,9 @@
+﻿  main.cpp
+c:\users\юрий\documents\github\graphics\rozab_aime\main.h(184): warning C4244: аргумент: преобразование "double" в "float", возможна потеря данных
+c:\users\юрий\documents\github\graphics\rozab_aime\main.h(194): warning C4244: аргумент: преобразование "double" в "float", возможна потеря данных
+c:\users\юрий\documents\github\graphics\rozab_aime\main.h(197): warning C4244: аргумент: преобразование "double" в "float", возможна потеря данных
+c:\users\юрий\documents\github\graphics\rozab_aime\main.h(198): warning C4244: аргумент: преобразование "double" в "float", возможна потеря данных
+c:\users\юрий\documents\github\graphics\rozab_aime\main.h(206): warning C4101: k: неиспользованная локальная переменная
+c:\users\юрий\documents\github\graphics\rozab_aime\main.h(375): warning C4715: InitBMP: значение возвращается не при всех путях выполнения
+  rozaB_aime.vcxproj -> C:\Users\Юрий\Documents\GitHub\Graphics\rozaB_aime\Debug\rozaB_aime.exe
+  rozaB_aime.vcxproj -> C:\Users\Юрий\Documents\GitHub\Graphics\rozaB_aime\Debug\rozaB_aime.pdb (Partial PDB)

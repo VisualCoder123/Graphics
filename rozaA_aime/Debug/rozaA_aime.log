@@ -1,0 +1,12 @@
+﻿  main.cpp
+c:\users\юрий\documents\github\graphics\rozaa_aime\main.h(160): warning C4244: аргумент: преобразование "double" в "float", возможна потеря данных
+c:\users\юрий\documents\github\graphics\rozaa_aime\main.h(174): warning C4244: аргумент: преобразование "double" в "float", возможна потеря данных
+c:\users\юрий\documents\github\graphics\rozaa_aime\main.h(184): warning C4244: аргумент: преобразование "double" в "float", возможна потеря данных
+c:\users\юрий\documents\github\graphics\rozaa_aime\main.h(197): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+c:\users\юрий\documents\github\graphics\rozaa_aime\main.h(198): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+c:\users\юрий\documents\github\graphics\rozaa_aime\main.h(202): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+c:\users\юрий\documents\github\graphics\rozaa_aime\main.h(203): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+c:\users\юрий\documents\github\graphics\rozaa_aime\main.h(232): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
+c:\users\юрий\documents\github\graphics\rozaa_aime\main.h(398): warning C4715: InitBMP: значение возвращается не при всех путях выполнения
+  rozaA_aime.vcxproj -> C:\Users\Юрий\Documents\GitHub\Graphics\rozaA_aime\Debug\rozaA_aime.exe
+  rozaA_aime.vcxproj -> Debug\rozaAnimation.pdb (Full PDB)

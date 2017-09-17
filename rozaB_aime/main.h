@@ -201,7 +201,7 @@ VOID LineGouraud(int x1, int x2, int y, double z1, double z2, double k1, double 
 //------------ рисование одной полигональной грани -------------
 //--------------- v - это координаты вершин грани ---------------
 //----- kr - коефициенты отражения света для каждой вершины ----
-VOID PolygonGouraud(VERTEX *v, double *kr, int nv, COLORREF clr)
+VOID PolygonGouraud(VERTEX *v, int nv, COLORREF clr)
 {
 	double x[4], z[4], k[4];
 	int i, y, nhor, minY, maxY, st, en;
